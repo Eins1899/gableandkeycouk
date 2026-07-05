@@ -118,7 +118,7 @@ function Stats() {
   ];
   return (
     <section className="bg-espresso border-y border-cream/10">
-      <div className="mx-auto max-w-6xl px-6 grid grid-cols-1 md:grid-cols-3 divide-y md:divide-y-0 md:divide-x divide-cream/10">
+      <div className="mx-auto max-w-6xl px-6 grid grid-cols-1 sm:grid-cols-3 divide-y sm:divide-y-0 sm:divide-x divide-cream/10">
         {stats.map(([n, l]) => (
           <div key={l} className="py-14 md:py-16 text-center">
             <div className="font-serif text-5xl md:text-6xl text-amber-warm">{n}</div>
