@@ -52,8 +52,8 @@ function Nav() {
   return (
     <header className="absolute top-0 left-0 right-0 z-30">
       <div className="mx-auto max-w-7xl px-6 sm:px-10 py-6 flex items-center justify-between">
-        <a href="#top" className="text-cream text-xl font-semibold tracking-tight lowercase">
-          stayflow
+        <a href="#top" className="font-serif text-cream text-xl tracking-tight">
+          Gable & Key
         </a>
         <nav className="hidden md:flex items-center gap-10 text-[13px] text-cream/80 font-light">
           <a href="#services" className="hover:text-cream transition-colors">Services</a>
@@ -145,12 +145,12 @@ function About() {
           />
         </div>
         <div>
-          <p className="label-eyebrow mb-6">About Stayflow</p>
+          <p className="label-eyebrow mb-6">About Gable & Key</p>
           <h2 className="font-serif text-cream text-4xl md:text-5xl lg:text-6xl leading-[1.08]">
             We manage your Airbnb <span className="italic">like it's our own.</span>
           </h2>
           <p className="mt-8 text-cream/70 text-base md:text-lg font-light leading-relaxed max-w-lg">
-            York is one of the UK's most visited cities — but great properties underperform every day due to poor management. Stayflow exists to close that gap. We're a focused, local co-hosting service that treats every property with the attention it deserves.
+            York is one of the UK's most visited cities — but great properties underperform every day due to poor management. Gable & Key exists to close that gap. We're a focused, local co-hosting service that treats every property with the attention it deserves.
           </p>
         </div>
       </div>
@@ -212,7 +212,7 @@ function Testimonial() {
       <div className="mx-auto max-w-3xl px-6 text-center">
         <div className="font-serif text-terracotta/40 text-[140px] md:text-[180px] leading-none select-none">&ldquo;</div>
         <blockquote className="-mt-8 md:-mt-14 font-serif italic text-cream text-2xl md:text-3xl lg:text-[34px] leading-[1.35]">
-          Stayflow took the whole operation off my plate. Occupancy went up, the reviews improved, and I genuinely don&apos;t have to think about it anymore.
+          Gable & Key took the whole operation off my plate. Occupancy went up, the reviews improved, and I genuinely don&apos;t have to think about it anymore.
         </blockquote>
         <div className="mt-10 mx-auto w-10 h-px bg-terracotta" />
         <p className="mt-6 text-[10px] tracking-[0.22em] uppercase text-cream/60 font-medium">
@@ -301,7 +301,7 @@ function Footer() {
   return (
     <footer className="bg-near-black border-t border-cream/10">
       <div className="mx-auto max-w-7xl px-6 py-10 flex flex-col md:flex-row items-center justify-between gap-6 text-[13px] text-cream/55 font-light">
-        <a href="#top" className="text-cream text-lg font-semibold lowercase">stayflow</a>
+        <a href="#top" className="font-serif text-cream text-lg tracking-tight">Gable & Key</a>
         <nav className="flex items-center gap-6">
           <a href="#" className="hover:text-cream transition-colors">Privacy</a>
           <span className="text-cream/20">·</span>
@@ -309,7 +309,7 @@ function Footer() {
           <span className="text-cream/20">·</span>
           <a href="#cta" className="hover:text-cream transition-colors">Contact</a>
         </nav>
-        <div>© 2026 Stayflow</div>
+        <div>© 2026 Gable & Key</div>
       </div>
     </footer>
   );
