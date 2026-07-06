@@ -2,6 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
 import heroYork from "@/assets/hero-york.jpg";
 import aboutInterior from "@/assets/about-interior.jpg";
+import gableKeyLogo from "@/assets/gable-key-logo.png.asset.json";
 
 export const Route = createFileRoute("/")({
   component: Landing,
