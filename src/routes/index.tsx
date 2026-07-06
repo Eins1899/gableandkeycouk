@@ -2,6 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
 import heroYork from "@/assets/hero-york.jpg";
 import aboutInterior from "@/assets/about-interior.jpg";
+import gableKeyLogo from "@/assets/gable-key-logo.png.asset.json";
 
 export const Route = createFileRoute("/")({
   component: Landing,
@@ -52,8 +53,8 @@ function Nav() {
   return (
     <header className="absolute top-0 left-0 right-0 z-30">
       <div className="mx-auto max-w-7xl px-6 sm:px-10 py-6 flex items-center justify-between">
-        <a href="#top" className="font-serif text-cream text-xl tracking-tight">
-          Gable & Key
+        <a href="#top" className="flex items-center" aria-label="Gable & Key home">
+          <img src={gableKeyLogo.url} alt="Gable & Key" className="h-10 md:h-12 w-auto object-contain" />
         </a>
         <nav className="hidden md:flex items-center gap-10 text-[13px] text-cream/80 font-light">
           <a href="#services" className="hover:text-cream transition-colors">Services</a>
