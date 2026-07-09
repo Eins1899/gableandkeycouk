@@ -1,10 +1,18 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
-import { useServerFn } from "@tanstack/react-start";
 import heroYork from "@/assets/hero-york.jpg";
 import aboutInterior from "@/assets/about-interior.jpg";
-import gableKeyIcon from "@/assets/gable-key-icon.png.asset.json";
-import { submitEstimate } from "@/lib/estimate.functions";
+import gableKeyIcon from "@/assets/gable-key-icon.png";
+
+// Absolute fallback so the form works when the site is served from a non-Lovable
+// origin (Netlify, custom domain). The Lovable-hosted backend accepts CORS from any origin.
+const LOVABLE_API_ORIGIN = "https://project--c2a91baa-3dbe-4785-ba31-c13a9a2e2c6a.lovable.app";
+function estimateEndpoint() {
+  if (typeof window === "undefined") return "/api/public/estimate";
+  const host = window.location.hostname;
+  const sameOrigin = host === "localhost" || host.endsWith("lovable.app") || host.endsWith("lovable.dev");
+  return `${sameOrigin ? "" : LOVABLE_API_ORIGIN}/api/public/estimate`;
+}
 
 export const Route = createFileRoute("/")({
   component: Landing,
@@ -56,7 +64,7 @@ function Nav() {
     <header className="absolute top-0 left-0 right-0 z-30">
       <div className="mx-auto max-w-7xl px-6 sm:px-10 py-6 flex items-center justify-between">
         <a href="#top" className="flex items-center gap-3" aria-label="Gable & Key home">
-          <img src={gableKeyIcon.url} alt="" className="h-11 md:h-12 w-auto object-contain" />
+          <img src={gableKeyIcon} alt="" className="h-11 md:h-12 w-auto object-contain" />
           <span className="font-serif text-cream text-[20px] leading-none tracking-tight">Gable &amp; Key</span>
         </a>
         <nav className="hidden md:flex items-center gap-10 text-[13px] text-cream/80 font-light">
@@ -263,7 +271,6 @@ function FAQ() {
 }
 
 function CTA() {
-  const submit = useServerFn(submitEstimate);
   const [form, setForm] = useState({
     name: "",
     email: "",
@@ -287,8 +294,10 @@ function CTA() {
     if (!form.bedrooms || !form.propertyType) return;
     setStatus("sending");
     try {
-      await submit({
-        data: {
+      const res = await fetch(estimateEndpoint(), {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
           name: form.name,
           email: form.email,
           location: form.location,
@@ -296,12 +305,16 @@ function CTA() {
           propertyType: form.propertyType,
           notes: form.notes,
           website: form.website,
-        },
+        }),
       });
+      if (res.status === 429) {
+        setStatus("rate");
+        return;
+      }
+      if (!res.ok) throw new Error(`HTTP ${res.status}`);
       setStatus("success");
-    } catch (err) {
-      const msg = err instanceof Error ? err.message : "";
-      setStatus(msg.includes("RATE_LIMIT") ? "rate" : "error");
+    } catch {
+      setStatus("error");
     }
   };
 
