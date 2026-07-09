@@ -3,7 +3,7 @@ import { useState } from "react";
 import { useServerFn } from "@tanstack/react-start";
 import heroYork from "@/assets/hero-york.jpg";
 import aboutInterior from "@/assets/about-interior.jpg";
-import gableKeyIcon from "@/assets/gable-key-icon.png.asset.json";
+import gableKeyIcon from "@/assets/gable-key-icon.png";
 import { submitEstimate } from "@/lib/estimate.functions";
 
 export const Route = createFileRoute("/")({
