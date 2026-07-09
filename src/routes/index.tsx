@@ -1,10 +1,18 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
-import { useServerFn } from "@tanstack/react-start";
 import heroYork from "@/assets/hero-york.jpg";
 import aboutInterior from "@/assets/about-interior.jpg";
 import gableKeyIcon from "@/assets/gable-key-icon.png";
-import { submitEstimate } from "@/lib/estimate.functions";
+
+// Absolute fallback so the form works when the site is served from a non-Lovable
+// origin (Netlify, custom domain). The Lovable-hosted backend accepts CORS from any origin.
+const LOVABLE_API_ORIGIN = "https://project--c2a91baa-3dbe-4785-ba31-c13a9a2e2c6a.lovable.app";
+function estimateEndpoint() {
+  if (typeof window === "undefined") return "/api/public/estimate";
+  const host = window.location.hostname;
+  const sameOrigin = host === "localhost" || host.endsWith("lovable.app") || host.endsWith("lovable.dev");
+  return `${sameOrigin ? "" : LOVABLE_API_ORIGIN}/api/public/estimate`;
+}
 
 export const Route = createFileRoute("/")({
   component: Landing,
