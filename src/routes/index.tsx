@@ -271,7 +271,6 @@ function FAQ() {
 }
 
 function CTA() {
-  const submit = useServerFn(submitEstimate);
   const [form, setForm] = useState({
     name: "",
     email: "",
@@ -295,8 +294,10 @@ function CTA() {
     if (!form.bedrooms || !form.propertyType) return;
     setStatus("sending");
     try {
-      await submit({
-        data: {
+      const res = await fetch(estimateEndpoint(), {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
           name: form.name,
           email: form.email,
           location: form.location,
@@ -304,12 +305,16 @@ function CTA() {
           propertyType: form.propertyType,
           notes: form.notes,
           website: form.website,
-        },
+        }),
       });
+      if (res.status === 429) {
+        setStatus("rate");
+        return;
+      }
+      if (!res.ok) throw new Error(`HTTP ${res.status}`);
       setStatus("success");
-    } catch (err) {
-      const msg = err instanceof Error ? err.message : "";
-      setStatus(msg.includes("RATE_LIMIT") ? "rate" : "error");
+    } catch {
+      setStatus("error");
     }
   };
 
