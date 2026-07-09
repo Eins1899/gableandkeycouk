@@ -56,7 +56,7 @@ function Nav() {
     <header className="absolute top-0 left-0 right-0 z-30">
       <div className="mx-auto max-w-7xl px-6 sm:px-10 py-6 flex items-center justify-between">
         <a href="#top" className="flex items-center gap-3" aria-label="Gable & Key home">
-          <img src={gableKeyIcon.url} alt="" className="h-11 md:h-12 w-auto object-contain" />
+          <img src={gableKeyIcon} alt="" className="h-11 md:h-12 w-auto object-contain" />
           <span className="font-serif text-cream text-[20px] leading-none tracking-tight">Gable &amp; Key</span>
         </a>
         <nav className="hidden md:flex items-center gap-10 text-[13px] text-cream/80 font-light">
