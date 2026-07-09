@@ -1,8 +1,10 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
+import { useServerFn } from "@tanstack/react-start";
 import heroYork from "@/assets/hero-york.jpg";
 import aboutInterior from "@/assets/about-interior.jpg";
 import gableKeyIcon from "@/assets/gable-key-icon.png.asset.json";
+import { submitEstimate } from "@/lib/estimate.functions";
 
 export const Route = createFileRoute("/")({
   component: Landing,
@@ -261,10 +263,51 @@ function FAQ() {
 }
 
 function CTA() {
-  const [email, setEmail] = useState("");
+  const submit = useServerFn(submitEstimate);
+  const [form, setForm] = useState({
+    name: "",
+    email: "",
+    location: "",
+    bedrooms: "" as "" | "Studio" | "1" | "2" | "3" | "4+",
+    propertyType: "" as "" | "Flat" | "House" | "Other",
+    notes: "",
+    website: "", // honeypot
+  });
+  const [status, setStatus] = useState<"idle" | "sending" | "success" | "error" | "rate">("idle");
+
+  const update = <K extends keyof typeof form>(k: K, v: (typeof form)[K]) =>
+    setForm((f) => ({ ...f, [k]: v }));
+
+  const inputCls =
+    "w-full bg-transparent border border-cream/20 text-cream placeholder:text-cream/35 px-4 py-3.5 text-sm font-light focus:outline-none focus:border-cream/50 transition-colors";
+  const labelCls = "block text-[10px] tracking-[0.18em] uppercase text-cream/60 font-medium mb-2 text-left";
+
+  const onSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!form.bedrooms || !form.propertyType) return;
+    setStatus("sending");
+    try {
+      await submit({
+        data: {
+          name: form.name,
+          email: form.email,
+          location: form.location,
+          bedrooms: form.bedrooms,
+          propertyType: form.propertyType,
+          notes: form.notes,
+          website: form.website,
+        },
+      });
+      setStatus("success");
+    } catch (err) {
+      const msg = err instanceof Error ? err.message : "";
+      setStatus(msg.includes("RATE_LIMIT") ? "rate" : "error");
+    }
+  };
+
   return (
     <section id="cta" className="bg-near-black py-28 md:py-36">
-      <div className="mx-auto max-w-2xl px-6 text-center">
+      <div className="mx-auto max-w-3xl px-6 text-center">
         <p className="label-eyebrow mb-6">Get started</p>
         <h2 className="font-serif text-cream text-4xl md:text-5xl lg:text-[56px] leading-[1.08]">
           Find out what your property <span className="italic">could earn.</span>
@@ -272,25 +315,102 @@ function CTA() {
         <p className="mt-6 text-cream/65 font-light leading-relaxed">
           Free, no-obligation income estimate based on real York market data.
         </p>
-        <form
-          onSubmit={(e) => { e.preventDefault(); }}
-          className="mt-10 flex flex-col sm:flex-row gap-3 max-w-lg mx-auto"
-        >
-          <input
-            type="email"
-            required
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            placeholder="your@email.com"
-            className="flex-1 bg-transparent border border-cream/20 text-cream placeholder:text-cream/35 px-5 py-4 text-sm font-light focus:outline-none focus:border-cream/50 transition-colors"
-          />
-          <button
-            type="submit"
-            className="bg-terracotta text-off-white text-[11px] tracking-[0.18em] uppercase font-medium px-8 py-4 hover:brightness-110 transition-all whitespace-nowrap"
-          >
-            Get Estimate
-          </button>
-        </form>
+
+        {status === "success" ? (
+          <div className="mt-12 border border-cream/20 p-8 md:p-10 text-cream font-light leading-relaxed">
+            <p className="font-serif text-2xl md:text-3xl text-cream">Thanks {form.name.split(" ")[0]} —</p>
+            <p className="mt-4 text-cream/75">
+              we&apos;ll send your estimate within a few hours. Prefer to talk?{" "}
+              <a href="mailto:hello@gableandkey.co.uk" className="text-terracotta hover:brightness-110">
+                hello@gableandkey.co.uk
+              </a>
+            </p>
+          </div>
+        ) : (
+          <form onSubmit={onSubmit} className="mt-10 grid grid-cols-1 md:grid-cols-2 gap-4 text-left">
+            {/* honeypot */}
+            <input
+              type="text"
+              tabIndex={-1}
+              autoComplete="off"
+              value={form.website}
+              onChange={(e) => update("website", e.target.value)}
+              className="hidden"
+              aria-hidden="true"
+            />
+
+            <div>
+              <label className={labelCls} htmlFor="gk-name">Name</label>
+              <input id="gk-name" required type="text" value={form.name}
+                onChange={(e) => update("name", e.target.value)} className={inputCls} placeholder="Your name" />
+            </div>
+            <div>
+              <label className={labelCls} htmlFor="gk-email">Email</label>
+              <input id="gk-email" required type="email" value={form.email}
+                onChange={(e) => update("email", e.target.value)} className={inputCls} placeholder="your@email.com" />
+            </div>
+
+            <div className="md:col-span-2">
+              <label className={labelCls} htmlFor="gk-loc">Property location</label>
+              <input id="gk-loc" required type="text" value={form.location}
+                onChange={(e) => update("location", e.target.value)} className={inputCls}
+                placeholder="e.g. York city centre, Bishopthorpe Road, YO1..." />
+            </div>
+
+            <div>
+              <label className={labelCls} htmlFor="gk-bed">Bedrooms</label>
+              <select id="gk-bed" required value={form.bedrooms}
+                onChange={(e) => update("bedrooms", e.target.value as typeof form.bedrooms)}
+                className={inputCls + " appearance-none cursor-pointer"}>
+                <option value="" className="bg-near-black">Select…</option>
+                {["Studio", "1", "2", "3", "4+"].map((b) => (
+                  <option key={b} value={b} className="bg-near-black">{b}</option>
+                ))}
+              </select>
+            </div>
+            <div>
+              <label className={labelCls} htmlFor="gk-type">Property type</label>
+              <select id="gk-type" required value={form.propertyType}
+                onChange={(e) => update("propertyType", e.target.value as typeof form.propertyType)}
+                className={inputCls + " appearance-none cursor-pointer"}>
+                <option value="" className="bg-near-black">Select…</option>
+                {["Flat", "House", "Other"].map((b) => (
+                  <option key={b} value={b} className="bg-near-black">{b}</option>
+                ))}
+              </select>
+            </div>
+
+            <div className="md:col-span-2">
+              <label className={labelCls} htmlFor="gk-notes">Anything else?</label>
+              <textarea id="gk-notes" rows={3} value={form.notes}
+                onChange={(e) => update("notes", e.target.value)} className={inputCls + " resize-none"}
+                placeholder="e.g. currently on Airbnb, empty between tenancies, just curious..." />
+            </div>
+
+            <div className="md:col-span-2 flex flex-col sm:flex-row items-center justify-between gap-4 mt-2">
+              <button
+                type="submit"
+                disabled={status === "sending"}
+                className="bg-terracotta text-off-white text-[11px] tracking-[0.18em] uppercase font-medium px-8 py-4 hover:brightness-110 transition-all disabled:opacity-60"
+              >
+                {status === "sending" ? "Sending…" : "Get Estimate"}
+              </button>
+              {status === "error" && (
+                <p className="text-xs text-cream/70 font-light">
+                  Something went wrong. Email{" "}
+                  <a href="mailto:hello@gableandkey.co.uk" className="text-terracotta">hello@gableandkey.co.uk</a>.
+                </p>
+              )}
+              {status === "rate" && (
+                <p className="text-xs text-cream/70 font-light">
+                  Too many submissions — try again later or email{" "}
+                  <a href="mailto:hello@gableandkey.co.uk" className="text-terracotta">hello@gableandkey.co.uk</a>.
+                </p>
+              )}
+            </div>
+          </form>
+        )}
+
         <p className="mt-6 text-xs text-cream/45 font-light">
           Or prefer to talk? We typically respond within a few hours.
         </p>

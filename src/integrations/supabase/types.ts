@@ -16,24 +16,39 @@ export type Database = {
     Tables: {
       estimate_submissions: {
         Row: {
+          bedrooms: string | null
           created_at: string
           email: string
           id: string
           ip_hash: string | null
+          location: string | null
+          name: string | null
+          notes: string | null
+          property_type: string | null
           user_agent: string | null
         }
         Insert: {
+          bedrooms?: string | null
           created_at?: string
           email: string
           id?: string
           ip_hash?: string | null
+          location?: string | null
+          name?: string | null
+          notes?: string | null
+          property_type?: string | null
           user_agent?: string | null
         }
         Update: {
+          bedrooms?: string | null
           created_at?: string
           email?: string
           id?: string
           ip_hash?: string | null
+          location?: string | null
+          name?: string | null
+          notes?: string | null
+          property_type?: string | null
           user_agent?: string | null
         }
         Relationships: []
