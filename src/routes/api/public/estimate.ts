@@ -83,10 +83,10 @@ export const Route = createFileRoute("/api/public/estimate")({
 
         if (error) return json({ error: "STORE_FAILED" }, 500);
 
-        // Best-effort email notification.
+        // Best-effort email notification — never fail the request on email errors.
         try {
           const origin = new URL(request.url).origin;
-          await fetch(`${origin}/lovable/email/transactional/send`, {
+          const res = await fetch(`${origin}/lovable/email/transactional/send`, {
             method: "POST",
             headers: {
               "content-type": "application/json",
@@ -98,9 +98,12 @@ export const Route = createFileRoute("/api/public/estimate")({
               idempotencyKey: `estimate-${ipHash}-${Date.now()}`,
               templateData: { ...data },
             }),
-          }).catch(() => {});
-        } catch {
-          // ignore
+          });
+          if (!res.ok) {
+            console.warn("[estimate] email send failed", res.status, await res.text().catch(() => ""));
+          }
+        } catch (err) {
+          console.warn("[estimate] email send threw", err);
         }
 
         return json({ ok: true });
