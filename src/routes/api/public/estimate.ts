@@ -93,24 +93,50 @@ export const Route = createFileRoute("/api/public/estimate")({
 
           if (error) return json({ error: "STORE_FAILED" }, 500);
 
-          // Best-effort email notification — never fail the request on email errors.
+          // Best-effort email notification via Resend — never fail the request on email errors.
           try {
-            const origin = new URL(request.url).origin;
-            const res = await fetch(`${origin}/lovable/email/transactional/send`, {
-              method: "POST",
-              headers: {
-                "content-type": "application/json",
-                authorization: `Bearer ${process.env.LOVABLE_API_KEY ?? ""}`,
-              },
-              body: JSON.stringify({
-                templateName: "estimate-notification",
-                recipientEmail: "hello@gableandkey.co.uk",
-                idempotencyKey: `estimate-${ipHash}-${Date.now()}`,
-                templateData: { ...data },
-              }),
-            });
-            if (!res.ok) {
-              console.warn("[estimate] email send failed", res.status, await res.text().catch(() => ""));
+            const resendKey = process.env.RESEND_API_KEY;
+            if (!resendKey) {
+              console.warn("[estimate] RESEND_API_KEY not configured — skipping email");
+            } else {
+              const timestamp = new Date().toISOString();
+              const escape = (s: string) =>
+                s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+              const rows: [string, string][] = [
+                ["Name", data.name],
+                ["Email", data.email],
+                ["Property location", data.location],
+                ["Bedrooms", data.bedrooms],
+                ["Property type", data.propertyType],
+                ["Message", data.notes || "(none)"],
+                ["Submitted", timestamp],
+              ];
+              const html = `<div style="font-family:system-ui,sans-serif;line-height:1.5">
+<h2 style="margin:0 0 12px">New estimate enquiry</h2>
+<table style="border-collapse:collapse">
+${rows.map(([k, v]) => `<tr><td style="padding:4px 12px 4px 0;color:#666;vertical-align:top"><strong>${escape(k)}</strong></td><td style="padding:4px 0;white-space:pre-wrap">${escape(v)}</td></tr>`).join("")}
+</table>
+</div>`;
+              const text = rows.map(([k, v]) => `${k}: ${v}`).join("\n");
+
+              const res = await fetch("https://api.resend.com/emails", {
+                method: "POST",
+                headers: {
+                  "content-type": "application/json",
+                  authorization: `Bearer ${resendKey}`,
+                },
+                body: JSON.stringify({
+                  from: "Gable & Key <notifications@notify.gableandkey.co.uk>",
+                  to: ["hello@gableandkey.co.uk"],
+                  reply_to: data.email,
+                  subject: `New estimate enquiry — ${data.name}, ${data.location}`,
+                  html,
+                  text,
+                }),
+              });
+              if (!res.ok) {
+                console.warn("[estimate] resend send failed", res.status, await res.text().catch(() => ""));
+              }
             }
           } catch (err) {
             console.warn("[estimate] email send threw", err);
