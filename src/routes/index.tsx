@@ -1,5 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
+import { Button } from "@/components/ui/button";
 import heroYork from "@/assets/hero-york.jpg";
 import aboutInterior from "@/assets/about-interior.jpg";
 import gableKeyIcon from "@/assets/gable-key-icon.png";
@@ -15,15 +16,23 @@ function estimateEndpoint() {
 }
 
 export const Route = createFileRoute("/")({
+  head: () => ({ meta: [
+    { title: "Gable & Key | Airbnb Property Management York" },
+    { name: "description", content: "Gable & Key manages your Airbnb completely — guest comms, pricing, check-ins and more. York-based co-hosting service. 20% fee, no upfront costs. Indicative estimates only." },
+    { property: "og:title", content: "Gable & Key | Airbnb Property Management York" },
+    { property: "og:description", content: "York-based Airbnb co-hosting. 20% fee, no setup fee. Request a free, no-obligation indicative income estimate." },
+    { property: "og:type", content: "website" },
+    { name: "twitter:card", content: "summary_large_image" },
+  ] }),
   component: Landing,
 });
 
 const services = [
-  ["01", "Listing optimisation", "Professional descriptions and photography that fill calendars."],
+  ["01", "Listing optimisation", "Professional descriptions and coordinating professional photography to help your listing stand out."],
   ["02", "Dynamic pricing", "Smart rates tuned to York events and real-time demand."],
   ["03", "Guest communications", "Every message handled promptly and professionally."],
   ["04", "Check-in coordination", "Seamless self check-in every time."],
-  ["05", "Calendar management", "No gaps, no double bookings — always optimised."],
+  ["05", "Calendar management", "Careful calendar coordination to reduce gaps and avoid double bookings."],
   ["06", "Monthly reporting", "Clear income statements every month, no surprises."],
 ];
 
@@ -39,6 +48,10 @@ const faqs = [
   ["What's your fee?", "20% of gross booking revenue. No setup fees, no monthly retainers, no charge during empty periods. You only pay when you earn."],
   ["Will I still have control?", "Absolutely. You see every booking, set blackout dates for personal use, and approve house rules. It's your property — we run the day-to-day."],
   ["What if I want to stop?", "After the initial 3-month term, 30 days' written notice ends the arrangement. Confirmed bookings are honoured unless you direct otherwise."],
+  ["Who pays for cleaning?", "You pay the cleaner directly. We coordinate the cleans and add no markup."],
+  ["What do you need from me?", "Access to the property, house details, any existing listing, and your insurance and safety certificates."],
+  ["Do I need permission from my mortgage lender or landlord?", "Often yes. Check your mortgage terms or lease before listing. We'll go through this with you before going live."],
+  ["What rules apply in York?", "We'll check the current requirements with you before going live, including insurance, safety and any local rules, which are changing."],
   ["Do I need special insurance?", "Standard residential insurance doesn't cover short-term letting. We'll advise you on what you need before going live."],
 ];
 
@@ -51,7 +64,7 @@ function Landing() {
       <About />
       <Services />
       <HowItWorks />
-      <Testimonial />
+      <WhyGableKey />
       <FAQ />
       <CTA />
       <Footer />
@@ -62,10 +75,10 @@ function Landing() {
 function Nav() {
   return (
     <header className="absolute top-0 left-0 right-0 z-30">
-      <div className="mx-auto max-w-7xl px-6 sm:px-10 py-6 flex items-center justify-between">
-        <a href="#top" className="flex items-center gap-3" aria-label="Gable & Key home">
-          <img src={gableKeyIcon} alt="" className="h-11 md:h-12 w-auto object-contain" />
-          <span className="font-serif text-cream text-[20px] leading-none tracking-tight">Gable &amp; Key</span>
+      <div className="mx-auto max-w-7xl px-4 sm:px-10 py-6 flex items-center justify-between gap-3">
+        <a href="#top" className="flex items-center gap-2 sm:gap-3 shrink-0" aria-label="Gable & Key home">
+          <img src={gableKeyIcon} alt="Gable & Key terracotta house-and-key emblem" className="h-11 md:h-12 w-auto object-contain" />
+          <span className="font-serif text-cream text-[20px] leading-none tracking-normal">Gable &amp; Key</span>
         </a>
         <nav className="hidden md:flex items-center gap-10 text-[13px] text-cream/80 font-light">
           <a href="#services" className="hover:text-cream transition-colors">Services</a>
@@ -74,9 +87,9 @@ function Nav() {
         </nav>
         <a
           href="#cta"
-          className="text-[10px] tracking-[0.18em] uppercase font-medium border border-cream/30 text-cream px-4 py-2.5 hover:border-cream hover:bg-cream/5 transition-colors"
+          className="text-[10px] tracking-normal sm:tracking-[0.18em] uppercase font-medium border border-cream/30 text-cream px-3 sm:px-4 py-2.5 hover:border-cream hover:bg-cream/5 transition-colors"
         >
-          Book a call
+          Free Estimate
         </a>
       </div>
     </header>
@@ -88,7 +101,7 @@ function Hero() {
     <section id="top" className="relative min-h-screen flex items-center justify-center overflow-hidden">
       <img
         src={heroYork}
-        alt="York at dusk"
+        alt="Historic York street and York Minster at dusk"
         width={1920}
         height={1280}
         className="absolute inset-0 h-full w-full object-cover"
@@ -101,12 +114,12 @@ function Hero() {
           <span className="italic font-serif text-cream/95">Effortlessly managed.</span>
         </h1>
         <p className="mt-8 max-w-xl mx-auto text-cream/70 text-base sm:text-lg font-light leading-relaxed">
-          We run your Airbnb from listing to checkout — so you earn more while doing less.
+          We run your Airbnb from listing to checkout — our service aims to help you earn more while doing less.
         </p>
         <div className="mt-12 flex flex-col sm:flex-row items-center justify-center gap-4">
           <a
             href="#cta"
-            className="bg-terracotta text-off-white text-[11px] tracking-[0.18em] uppercase font-medium px-8 py-4 hover:brightness-110 transition-all"
+            className="h-auto rounded-none shadow-none bg-terracotta text-off-white text-[11px] tracking-[0.18em] uppercase font-medium px-8 py-4 hover:brightness-110 transition-all"
           >
             Free Estimate
           </a>
@@ -125,7 +138,7 @@ function Hero() {
 function Stats() {
   const stats = [
     ["20%", "Management fee"],
-    ["Zero", "Upfront cost"],
+    ["No", "Setup fee"],
     ["30 days", "Exit notice"],
   ];
   return (
@@ -149,7 +162,7 @@ function About() {
         <div className="relative aspect-[4/5] overflow-hidden">
           <img
             src={aboutInterior}
-            alt="Boutique interior"
+            alt="Boutique-style property interior with elegant furnishings"
             loading="lazy"
             width={1200}
             height={1400}
@@ -162,7 +175,7 @@ function About() {
             We manage your Airbnb <span className="italic">like it's our own.</span>
           </h2>
           <p className="mt-8 text-cream/70 text-base md:text-lg font-light leading-relaxed max-w-lg">
-            York is one of the UK's most visited cities — but great properties underperform every day due to poor management. Gable & Key exists to close that gap. We're a focused, local co-hosting service that treats every property with the attention it deserves.
+            York is one of the UK's most visited cities — but great properties underperform every day due to poor management. Gable & Key exists to close that gap and aims to help you earn more — income is not guaranteed. We're a focused, local co-hosting service that treats every property with the attention it deserves.
           </p>
         </div>
       </div>
@@ -201,7 +214,7 @@ function HowItWorks() {
         <div className="text-center mb-16 md:mb-20">
           <p className="label-eyebrow mb-6">How it works</p>
           <h2 className="font-serif text-cream text-4xl md:text-5xl lg:text-6xl">
-            Up and running <span className="italic">in days.</span>
+            Up and running <span className="italic">in weeks, not months.</span>
           </h2>
         </div>
         <div className="grid grid-cols-1 md:grid-cols-4 md:divide-x divide-cream/10">
@@ -218,18 +231,25 @@ function HowItWorks() {
   );
 }
 
-function Testimonial() {
+function WhyGableKey() {
+  const reasons = [
+    ["Based in York", "Local to the city and its visitor calendar."],
+    ["You stay the host", "The property and the Airbnb account remain yours."],
+    ["You only pay when you earn", "20% of booking revenue, no setup fee, no retainer."],
+    ["No long lock-in", "3-month initial term, then 30 days' notice."],
+  ];
   return (
-    <section className="bg-near-black py-28 md:py-40">
-      <div className="mx-auto max-w-3xl px-6 text-center">
-        <div className="font-serif text-terracotta/40 text-[140px] md:text-[180px] leading-none select-none">&ldquo;</div>
-        <blockquote className="-mt-8 md:-mt-14 font-serif italic text-cream text-2xl md:text-3xl lg:text-[34px] leading-[1.35]">
-          Gable & Key took the whole operation off my plate. Occupancy went up, the reviews improved, and I genuinely don&apos;t have to think about it anymore.
-        </blockquote>
-        <div className="mt-10 mx-auto w-10 h-px bg-terracotta" />
-        <p className="mt-6 text-[10px] tracking-[0.22em] uppercase text-cream/60 font-medium">
-          James M. · Property Owner, York City Centre
-        </p>
+    <section className="bg-near-black py-28 md:py-36">
+      <div className="mx-auto max-w-6xl px-6">
+        <h2 className="font-serif text-cream text-4xl md:text-5xl text-center mb-16">Why Gable &amp; Key</h2>
+        <div className="grid grid-cols-1 md:grid-cols-2 border-t border-l border-cream/10">
+          {reasons.map(([title, description]) => (
+            <div key={title} className="border-b border-r border-cream/10 p-10 md:p-12">
+              <h3 className="font-serif text-2xl text-cream">{title}</h3>
+              <p className="mt-3 text-cream/60 text-sm font-light leading-relaxed">{description}</p>
+            </div>
+          ))}
+        </div>
       </div>
     </section>
   );
@@ -251,14 +271,17 @@ function FAQ() {
             const isOpen = open === i;
             return (
               <div key={q} className="border-b border-cream/10">
-                <button
+                <Button
+                  variant="ghost"
+                  aria-expanded={isOpen}
+                  aria-controls={`faq-${i}`}
                   onClick={() => setOpen(isOpen ? null : i)}
-                  className="w-full py-6 md:py-7 flex items-center justify-between gap-6 text-left"
+                  className="w-full h-auto rounded-none whitespace-normal px-0 py-6 md:py-7 flex items-center justify-between gap-6 text-left hover:bg-transparent"
                 >
                   <span className="font-serif text-lg md:text-xl text-cream">{q}</span>
                   <span className={`text-terracotta text-2xl font-light shrink-0 transition-transform ${isOpen ? "rotate-45" : ""}`}>+</span>
-                </button>
-                <div className={`overflow-hidden transition-all duration-300 ${isOpen ? "max-h-40 pb-6" : "max-h-0"}`}>
+                </Button>
+                <div id={`faq-${i}`} hidden={!isOpen} className="pb-6">
                   <p className="text-cream/65 text-[15px] font-light leading-relaxed pr-10">{a}</p>
                 </div>
               </div>
@@ -277,6 +300,8 @@ function CTA() {
     location: "",
     bedrooms: "" as "" | "Studio" | "1" | "2" | "3" | "4+",
     propertyType: "" as "" | "Flat" | "House" | "Other",
+    alreadyListed: "" as "" | "Yes" | "No",
+    listingLinkOrPhone: "",
     notes: "",
     website: "", // honeypot
   });
@@ -286,12 +311,12 @@ function CTA() {
     setForm((f) => ({ ...f, [k]: v }));
 
   const inputCls =
-    "w-full bg-transparent border border-cream/20 text-cream placeholder:text-cream/35 px-4 py-3.5 text-sm font-light focus:outline-none focus:border-cream/50 transition-colors";
+    "w-full min-w-0 bg-transparent border border-cream/20 text-cream placeholder:text-cream/35 px-4 py-3.5 text-sm font-light focus:outline-none focus:border-cream/50 transition-colors";
   const labelCls = "block text-[10px] tracking-[0.18em] uppercase text-cream/60 font-medium mb-2 text-left";
 
   const onSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!form.bedrooms || !form.propertyType) return;
+    if (!form.bedrooms || !form.propertyType || !form.alreadyListed || status === "sending") return;
     setStatus("sending");
     try {
       const res = await fetch(estimateEndpoint(), {
@@ -303,6 +328,8 @@ function CTA() {
           location: form.location,
           bedrooms: form.bedrooms,
           propertyType: form.propertyType,
+          alreadyListed: form.alreadyListed,
+          listingLinkOrPhone: form.listingLinkOrPhone,
           notes: form.notes,
           website: form.website,
         }),
@@ -326,14 +353,14 @@ function CTA() {
           Find out what your property <span className="italic">could earn.</span>
         </h2>
         <p className="mt-6 text-cream/65 font-light leading-relaxed">
-          Free, no-obligation income estimate based on real York market data.
+          A free, no-obligation income estimate for your property, based on comparable York listings.
         </p>
 
         {status === "success" ? (
           <div className="mt-12 border border-cream/20 p-8 md:p-10 text-cream font-light leading-relaxed">
             <p className="font-serif text-2xl md:text-3xl text-cream">Thanks {form.name.split(" ")[0]} —</p>
             <p className="mt-4 text-cream/75">
-              we&apos;ll send your estimate within a few hours. Prefer to talk?{" "}
+              we aim to send your estimate within one working day. Prefer email?{" "}
               <a href="mailto:hello@gableandkey.co.uk" className="text-terracotta hover:brightness-110">
                 hello@gableandkey.co.uk
               </a>
@@ -394,6 +421,21 @@ function CTA() {
             </div>
 
             <div className="md:col-span-2">
+              <label className={labelCls} htmlFor="gk-listed">Is your property already listed on Airbnb?</label>
+              <select id="gk-listed" required value={form.alreadyListed}
+                onChange={(e) => update("alreadyListed", e.target.value as typeof form.alreadyListed)}
+                className={inputCls + " cursor-pointer"}>
+                <option value="" className="bg-near-black">Select…</option>
+                <option value="Yes" className="bg-near-black">Yes</option>
+                <option value="No" className="bg-near-black">No</option>
+              </select>
+            </div>
+            <div className="md:col-span-2">
+              <label className={labelCls} htmlFor="gk-link">Airbnb listing link or phone number <span className="normal-case">(optional)</span></label>
+              <input id="gk-link" type="text" maxLength={500} value={form.listingLinkOrPhone}
+                onChange={(e) => update("listingLinkOrPhone", e.target.value)} className={inputCls} />
+            </div>
+            <div className="md:col-span-2">
               <label className={labelCls} htmlFor="gk-notes">Anything else?</label>
               <textarea id="gk-notes" rows={3} value={form.notes}
                 onChange={(e) => update("notes", e.target.value)} className={inputCls + " resize-none"}
@@ -401,13 +443,13 @@ function CTA() {
             </div>
 
             <div className="md:col-span-2 flex flex-col sm:flex-row items-center justify-between gap-4 mt-2">
-              <button
+              <Button
                 type="submit"
                 disabled={status === "sending"}
-                className="bg-terracotta text-off-white text-[11px] tracking-[0.18em] uppercase font-medium px-8 py-4 hover:brightness-110 transition-all disabled:opacity-60"
+                className="h-auto rounded-none shadow-none bg-terracotta text-off-white text-[11px] tracking-[0.18em] uppercase font-medium px-8 py-4 hover:brightness-110 transition-all disabled:opacity-60"
               >
-                {status === "sending" ? "Sending…" : "Get Estimate"}
-              </button>
+                {status === "sending" ? "Sending…" : "Get my free estimate"}
+              </Button>
               {status === "error" && (
                 <p className="text-xs text-cream/70 font-light">
                   Something went wrong. Email{" "}
@@ -421,11 +463,12 @@ function CTA() {
                 </p>
               )}
             </div>
+            <p className="md:col-span-2 text-xs text-cream/60 leading-relaxed">By sending this you agree to our <a href="/privacy" className="text-terracotta underline">Privacy Policy</a></p>
           </form>
         )}
 
         <p className="mt-6 text-xs text-cream/45 font-light">
-          Or prefer to talk? We typically respond within a few hours.
+          Prefer email? <a href="mailto:hello@gableandkey.co.uk" className="text-terracotta">hello@gableandkey.co.uk</a>. We aim to reply within one working day.
         </p>
       </div>
     </section>
@@ -435,15 +478,16 @@ function CTA() {
 function Footer() {
   return (
     <footer className="bg-near-black border-t border-cream/10">
-      <div className="mx-auto max-w-7xl px-6 py-10 flex flex-col md:flex-row items-center justify-between gap-6 text-[13px] text-cream/55 font-light">
-        <a href="#top" className="font-serif text-cream text-lg tracking-tight">Gable & Key</a>
+      <div className="mx-auto max-w-7xl px-6 py-10 flex flex-col lg:flex-row items-center justify-between gap-6 text-[13px] text-cream/55 font-light">
+        <a href="#top" className="font-serif text-cream text-lg tracking-normal">Gable & Key</a>
         <nav className="flex items-center gap-6">
-          <a href="#" className="hover:text-cream transition-colors">Privacy</a>
+          <a href="/privacy" className="hover:text-cream transition-colors">Privacy</a>
           <span className="text-cream/20">·</span>
-          <a href="#" className="hover:text-cream transition-colors">Terms</a>
+          <a href="/terms" className="hover:text-cream transition-colors">Terms</a>
           <span className="text-cream/20">·</span>
           <a href="#cta" className="hover:text-cream transition-colors">Contact</a>
         </nav>
+        <a href="mailto:hello@gableandkey.co.uk" className="hover:text-cream transition-colors">hello@gableandkey.co.uk</a>
         <div>© 2026 Gable & Key</div>
       </div>
     </footer>
