@@ -16,11 +16,13 @@ export type Database = {
     Tables: {
       estimate_submissions: {
         Row: {
+          already_listed: string | null
           bedrooms: string | null
           created_at: string
           email: string
           id: string
           ip_hash: string | null
+          listing_link_or_phone: string | null
           location: string | null
           name: string | null
           notes: string | null
@@ -28,11 +30,13 @@ export type Database = {
           user_agent: string | null
         }
         Insert: {
+          already_listed?: string | null
           bedrooms?: string | null
           created_at?: string
           email: string
           id?: string
           ip_hash?: string | null
+          listing_link_or_phone?: string | null
           location?: string | null
           name?: string | null
           notes?: string | null
@@ -40,11 +44,13 @@ export type Database = {
           user_agent?: string | null
         }
         Update: {
+          already_listed?: string | null
           bedrooms?: string | null
           created_at?: string
           email?: string
           id?: string
           ip_hash?: string | null
+          listing_link_or_phone?: string | null
           location?: string | null
           name?: string | null
           notes?: string | null
