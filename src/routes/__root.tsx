@@ -6,6 +6,7 @@ import {
   useRouter,
   HeadContent,
   Scripts,
+  type ErrorComponentProps,
 } from "@tanstack/react-router";
 import { useEffect, type ReactNode } from "react";
 
@@ -34,7 +35,7 @@ function NotFoundComponent() {
   );
 }
 
-function ErrorComponent({ error, reset }: { error: Error; reset: () => void }) {
+function ErrorComponent({ error, reset }: ErrorComponentProps) {
   console.error(error);
   const router = useRouter();
   useEffect(() => {
@@ -77,17 +78,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "Gable & Key | Airbnb Property Management York" },
-      { name: "description", content: "Short-term rental management in York. Gable & Key runs your Airbnb end to end — guests, pricing, check-ins — so your property earns more while you do less." },
       { name: "author", content: "Gable & Key" },
-      { property: "og:title", content: "Gable & Key | Airbnb Property Management York" },
-      { property: "og:description", content: "Short-term rental management in York. Gable & Key runs your Airbnb end to end — guests, pricing, check-ins — so your property earns more while you do less." },
-      { property: "og:type", content: "website" },
-      { name: "twitter:card", content: "summary_large_image" },
-      { name: "twitter:title", content: "Gable & Key | Airbnb Property Management York" },
-      { name: "twitter:description", content: "Short-term rental management in York. Gable & Key runs your Airbnb end to end — guests, pricing, check-ins — so your property earns more while you do less." },
-      { property: "og:image", content: "https://storage.googleapis.com/gpt-engineer-file-uploads/hZYxHZaFL3QEaI5Mkf9dEG6liDr1/social-images/social-1783539313745-GableKey_social.webp" },
-      { name: "twitter:image", content: "https://storage.googleapis.com/gpt-engineer-file-uploads/hZYxHZaFL3QEaI5Mkf9dEG6liDr1/social-images/social-1783539313745-GableKey_social.webp" },
     ],
     links: [
       { rel: "stylesheet", href: appCss },

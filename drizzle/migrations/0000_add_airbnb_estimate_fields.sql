@@ -1,0 +1,3 @@
+ALTER TABLE public.estimate_submissions ADD COLUMN already_listed text, ADD COLUMN listing_link_or_phone text;
+COMMENT ON COLUMN public.estimate_submissions.already_listed IS 'Whether the property is already listed on Airbnb: Yes or No; null for legacy enquiries.';
+COMMENT ON COLUMN public.estimate_submissions.listing_link_or_phone IS 'Optional Airbnb listing link or phone number supplied with an estimate enquiry.';

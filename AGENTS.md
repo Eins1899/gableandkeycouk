@@ -8,3 +8,7 @@
 > Commits you push to the connected branch sync back to Lovable and show up in
 > the editor, so keep the branch in a working state.
 <!-- LOVABLE:END -->
+
+- Estimate input validation, the IP limit predicate and email field rows are shared in a browser-safe module; both submission paths use one server-only non-fatal Resend helper to prevent divergence.
+- Privacy and terms are separate content routes using a shared legal-page layout; each content route defines its own metadata.
+- Keep media source-controlled for external hosting; omit image metadata when the page only has bundled relative images.
